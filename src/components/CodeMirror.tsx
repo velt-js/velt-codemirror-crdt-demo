@@ -6,7 +6,7 @@ import {
 import { javascript } from "@codemirror/lang-javascript";
 import { EditorState } from "@codemirror/state";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { VeltCodeMirrorStore } from "@veltdev/codemirror-crdt-dev";
+import { createVeltCodeMirrorStore, VeltCodeMirrorStore } from "@veltdev/codemirror-crdt-dev";
 import { useVeltClient, useVeltInitState } from "@veltdev/react";
 import { basicSetup, EditorView } from "codemirror";
 import React, { useEffect, useRef } from "react";
@@ -38,39 +38,74 @@ const CodeMirror: React.FC = () => {
     const { client } = useVeltClient();
 
     useEffect(() => {
-        if (editorRef.current && !viewRef.current) {
+        if (editorRef.current && !viewRef.current && client) {
 
-            // Initialize Velt CodeMirror with the Y.Doc
-            codeMirrorStoreRef.current = new VeltCodeMirrorStore('velt-codemirror-crdt-demo-test1-22-jul', client);
+            // // Initialize Velt CodeMirror with the Y.Doc
+            // // 'velt-codemirror-crdt-demo-test1-22-jul', client
+            // codeMirrorStoreRef.current = new VeltCodeMirrorStore({
+            //     editorId: 'velt-codemirror-crdt-demo-test1-22-jul',
+            //     veltClient: client,
+            // });
 
-            const startState = EditorState.create({
-                doc: codeMirrorStoreRef.current.getYText()?.toString() ?? '',
-                extensions: [
-                    basicSetup,
-                    javascript(),
-                    // oneDark,
-                    autocompletion(),
-                    // autocompletion(customCompletions),
-                    yCollab(codeMirrorStoreRef.current.getYText()!, codeMirrorStoreRef.current.getAwareness(), { undoManager: codeMirrorStoreRef.current.getUndoManager() }),
-                ],
-            });
+            // const startState = EditorState.create({
+            //     doc: codeMirrorStoreRef.current.getYText()?.toString() ?? '',
+            //     extensions: [
+            //         basicSetup,
+            //         javascript(),
+            //         // oneDark,
+            //         autocompletion(),
+            //         // autocompletion(customCompletions),
+            //         yCollab(codeMirrorStoreRef.current.getYText()!, codeMirrorStoreRef.current.getAwareness(), { undoManager: codeMirrorStoreRef.current.getUndoManager() }),
+            //     ],
+            // });
 
-            viewRef.current = new EditorView({
-                state: startState,
-                parent: editorRef.current,
-            });
+            // viewRef.current = new EditorView({
+            //     state: startState,
+            //     parent: editorRef.current,
+            // });
+
+            setupCodeMirrorEditor();
         }
 
         return () => {
             viewRef.current?.destroy();
             viewRef.current = null;
         };
-    }, []);
+    }, [client]);
+
+    const setupCodeMirrorEditor = async () => {
+        if (!client) return;
+        // Initialize Velt CodeMirror with the Y.Doc
+        // 'velt-codemirror-crdt-demo-test1-22-jul', client
+        codeMirrorStoreRef.current = await createVeltCodeMirrorStore({
+            editorId: 'velt-codemirror-crdt-demo-test1-22-jul',
+            veltClient: client!,
+        });
+
+        if (!codeMirrorStoreRef.current) return;
+
+        const startState = EditorState.create({
+            doc: codeMirrorStoreRef.current.getYText()?.toString() ?? '',
+            extensions: [
+                basicSetup,
+                javascript(),
+                // oneDark,
+                autocompletion(),
+                // autocompletion(customCompletions),
+                yCollab(codeMirrorStoreRef.current.getYText()!, codeMirrorStoreRef.current.getAwareness(), { undoManager: codeMirrorStoreRef.current.getUndoManager() }),
+            ],
+        });
+
+        viewRef.current = new EditorView({
+            state: startState,
+            parent: editorRef.current!,
+        });
+    }
 
     return (
         <div
             ref={editorRef}
-            style={{ height: "500px", border: "1px solid #ccc", borderRadius: 4 }}
+            className="codemirror-container"
         />
     );
 };
