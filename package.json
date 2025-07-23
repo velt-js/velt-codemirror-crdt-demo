@@ -12,10 +12,13 @@
   "dependencies": {
     "@codemirror/autocomplete": "^6.18.6",
     "@codemirror/basic-setup": "^0.20.0",
+    "@codemirror/lang-css": "^6.3.1",
+    "@codemirror/lang-html": "^6.4.9",
     "@codemirror/lang-javascript": "^6.2.4",
     "@codemirror/state": "^6.5.2",
     "@codemirror/theme-one-dark": "^6.1.3",
     "@codemirror/view": "^6.38.1",
+    "@veltdev/codemirror-crdt": "^1.0.1",
     "@veltdev/react": "^4.5.0-beta.59",
     "codemirror": "^6.0.2",
     "react": "^19.1.0",
