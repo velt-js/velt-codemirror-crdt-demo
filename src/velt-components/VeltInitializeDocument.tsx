@@ -8,9 +8,9 @@ function VeltInitializeDocument() {
     useEffect(() => {
         setDocuments([
             {
-                id: 'velt-codemirror-crdt-demo-test1-22-jul',
+                id: 'velt-codemirror-crdt-demo-test1-24-jul',
                 metadata: {
-                    documentName: 'Velt CodeMirror CRDT Demo Test1 22 Jul 2025',
+                    documentName: 'Velt CodeMirror CRDT Demo Test1 24 Jul 2025',
                 }
             }
         ])
