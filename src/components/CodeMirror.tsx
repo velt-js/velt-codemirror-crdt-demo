@@ -28,6 +28,8 @@ const CodeMirror: React.FC<CodeMirrorProps> = ({ editorId, fileType }) => {
 
     const { client } = useVeltClient();
 
+    const veltInitialised = useVeltInitState();
+
     const getLanguageExtension = (type: string) => {
         switch (type) {
             case 'html':
@@ -64,16 +66,16 @@ const CodeMirror: React.FC<CodeMirrorProps> = ({ editorId, fileType }) => {
             cleanupEditor();
         }
 
-        if (editorRef.current && client && editorId) {
+        if (editorRef.current && client && editorId && veltInitialised) {
             setupCodeMirrorEditor();
         }
 
         return cleanupEditor;
-    }, [client, editorId, fileType]);
+    }, [client, editorId, fileType, veltInitialised]);
 
     const setupCodeMirrorEditor = async () => {
-        if (!client || !editorId) return;
-        
+        if (!client || !veltInitialised || !editorId) return;
+
         // Prevent duplicate setups
         if (editorIdRef.current === editorId && viewRef.current) {
             return;
