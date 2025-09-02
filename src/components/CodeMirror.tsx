@@ -43,7 +43,7 @@ const CodeMirror: React.FC<CodeMirrorProps> = ({ editorId, fileType }) => {
         return '';
     };
 
-    const { store, isLoading, loadingText } = useVeltCodeMirrorCrdtExtension({ editorId });
+    const { store, isLoading } = useVeltCodeMirrorCrdtExtension({ editorId });
 
     useEffect(() => {
         if (!store || !editorRef.current) return;
@@ -80,7 +80,7 @@ const CodeMirror: React.FC<CodeMirrorProps> = ({ editorId, fileType }) => {
         >
             {isLoading && (
                 <LoadingSpinner
-                    loadingText={loadingText}
+                    loadingText={'Loading...'}
                     subtitle={getFileTypeSubtitle(editorId)}
                 />
             )}
